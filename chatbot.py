@@ -20,7 +20,7 @@ def generate_ideas(query):
     "store": True,
     "message" :[
       {"role":"system", "content": "You are a helpful assistent that generates unique app ideas with priority "},
-      {"role":"user", "content":"Generate 3 unique app ideas based on this {query}. for each idea, provide a priority score (1-5, with 1 being the highest priority) based on relevance, potential impact and feasibility. Also, provode a brief explanation for the priority score"}
+      {"role":"user", "content": f"Generate 3 unique app ideas based on this {query}. for each idea, provide a priority score (1-5, with 1 being the highest priority) based on relevance, potential impact and feasibility. Also, provode a brief explanation for the priority score"}
       
       ]
   }
@@ -31,5 +31,29 @@ def generate_ideas(query):
   #Process the response, convert into JSON object and cleaning up
   
   ideas = response.json()['choices'][0]['message']['content'].strip().split('\n\n')
+  return [idea.strip() for idea in ideas if idea.strip()]
+
+
+  #For Expanding the idea even further 
+  
+  def expand_ideas(unique_idea):
+    
+    headers = {
+      "Content-Type" : "application/json",
+      "Authorization": f"Bearer {API_KEY}"
+    }
+    
+    data = {
+      "model" :"gpt-4o-mini",
+      "store":True,
+      "messages": [
+        {"role": "system", "content": "You are a helpful assistant that provides detailed suggestions for app ideas."},
+        {"role": "user", "content": f"Provode a detailed suggestion for this app idea:{unique_idea}"}
+      ]
+    }
+    response = requests.post(API_URL, headers=headers, json=data)
+    response.raise_for_status()
+    return response.json()["chocies"][0]["message"]['content'].strip()
+  
   
   

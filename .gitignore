@@ -1,0 +1,31 @@
+# Ignore environment variables file
+.env
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+*.venv
+.env
+
+# Flask file
+instance/
+
+# If using PyCharm
+.idea/
+
+# If using VSCode
+.vscode/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+

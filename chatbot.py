@@ -55,5 +55,17 @@ def generate_ideas(query):
     response.raise_for_status()
     return response.json()["chocies"][0]["message"]['content'].strip()
   
+def parse_idea(idea_text):
+  #Split input text in lines
+  lines =idea_text.split('\n')
+  
+  #Extracting specific text individually 
+  idea = lines[0].split(":", 1)[1]
+  priorty = int(lines[1].split(': ')[1].split('/')[0])
+  explanation = lines[2].split(': ',1)[1]
+  return {'idea':idea, 'priorty':priorty, 'Explanation':explanation}
+  
+  
+  
   
   

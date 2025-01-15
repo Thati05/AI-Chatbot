@@ -76,28 +76,43 @@ def main():
 
     ideas = generate_ideas(query)
     ranked_ideas = rank_ideas(ideas)
-
-    print("\nRanked Ideas with Priority Scores:")
+    
+    print("\nRanked Ideas with Priority Scores:\n")
     for ranked_idea in ranked_ideas:
-        print(f"{ranked_idea['idea']} - Priority Score: {ranked_idea['priority_score']} (Relevance: {ranked_idea['relevance']}, Impact: {ranked_idea['impact']}, Feasibility: {ranked_idea['feasibility']})\n")
+      print(f"{ranked_idea['idea']} - Priority Score: {ranked_idea['priority_score']} (Relevance: {ranked_idea['relevance']}, Impact: {ranked_idea['impact']}, Feasibility: {ranked_idea['feasibility']})\n")
 
     while True:
-        selection = input("\nSelect two ideas by typing their numbers for further explanation (e.g., 1, 3): ")
-        try:
-            selected_indices = [int(x.strip()) for x in selection.split(',')]
-            if len(selected_indices) == 2 and all(1 <= i <= len(ranked_ideas) for i in selected_indices):
-                break
-            else:
-                print("Please select exactly two valid ideas.")
-        except ValueError:
-            print("Invalid input. Please enter two numbers separated by a comma.")
-
-    print("\nDetailed suggestions for selected ideas:")
-    for index in selected_indices:
-        idea = ranked_ideas[index - 1]['idea']
-        suggestion = expand_ideas(idea)
-        print(f"\nIdea: {idea}")
-        print(f"Suggestion: {suggestion}")
+        action = input("\nWould you like to (1) Select an idea for expansion or (2) Request an explanation of the priority score? Type 1 or 2: ")
+        if action == "1":
+            selection = input("Select an idea by typing its number: ")
+            try:
+                index = int(selection.strip()) - 1
+                if 0 <= index < len(ranked_ideas):
+                    idea = ranked_ideas[index]['idea']
+                    suggestion = expand_ideas(idea)
+                    print(f"\nIdea: {idea}")
+                    print(f"Suggestion: {suggestion}")
+                    break
+                else:
+                    print("Please select a valid idea number.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+        elif action == "2":
+            selection = input("Select an idea by typing its number to explain the priority score: ")
+            try:
+                index = int(selection.strip()) - 1
+                if 0 <= index < len(ranked_ideas):
+                    explanation = ranked_ideas[index]
+                    print(f"\nIdea: {explanation['idea']}")
+                    print(f"Priority Score: {explanation['priority_score']}")
+                    print(f"Relevance: {explanation['relevance']}, Impact: {explanation['impact']}, Feasibility: {explanation['feasibility']}")
+                    break
+                else:
+                    print("Please select a valid idea number.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+        else:
+            print("Invalid option. Please type 1 or 2.")
 
 if __name__ == "__main__":
     main()

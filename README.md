@@ -1,52 +1,43 @@
 # Creative App Idea Generator
 
-This project is a Creative App Idea Generator that utilizes Google's Generative AI API to generate, rank, and expand on innovative app ideas based on user input. The system ranks the generated ideas based on their relevance, impact, and feasibility, providing priority scores to help users select the most promising ideas.
+This project is an AI-driven application designed to generate and prioritize innovative app ideas based on user queries. By leveraging a generative AI model, users can input a general area of interest, and the application will return three unique app ideas, along with their relevance, impact, feasibility, and overall priority scores.
 
 ## Features
 
-- **Generate App Ideas**: Users can input a query describing a general area of interest, and the AI will generate three unique app ideas related to that query.
-- **Rank Ideas**: The generated ideas are evaluated and ranked based on relevance, impact, and feasibility, resulting in a priority score.
-- **Expand Ideas**: Users can select two ideas to receive an expanded explanation and suggestions for each.
-- **Priority Score Explanation**: Users can request an explanation of the priority score for a specific idea.
+- **Generate App Ideas**: Receive three unique app ideas based on your query.
+- **Rank Ideas**: Ideas are ranked by relevance, impact, and feasibility.
+- **Expand Ideas**: Select two ideas to receive detailed expansions.
+- **Priority Score Explanation**: Understand the scoring logic behind each idea's ranking.
 
-## Requirements
+## Setup Instructions
 
-- Python 3.x
-- `google-generativeai` package
-- `python-dotenv` package
-- An API key for Google's Generative AI service
-
-## Setup
-
-1. Clone the repository:
-    ```bash
-    git clone <repository_url>
-    cd <repository_name>
-    ```
-2. Install the required packages:
-    ```bash
-    pip install google-generativeai python-dotenv
-    ```
-3. Set up your environment variables:
-    - Create a `.env` file in the root directory.
-    - Add your API key in the `.env` file:
-    ```
-    GEMINI_API_KEY=your_api_key_here
-    ```
-4. Run the application:
-    ```bash
-    python chatbot.py
-    ```
+1. Clone the repository.
+2. Install the required dependencies using `pip install -r requirements.txt`.
+3. Create a `.env` file in the project root and add your API key:
+   ```
+   GEMINI_API_KEY=your_api_key_here
+   ```
+4. Run the application using:
+   ```
+   python chatbot.py
+   ```
 
 ## Usage
 
-1. **Start the application**: Run `chatbot.py` to start the idea generator.
-2. **Input a query**: Type in a general area of interest for an app, and the system will generate three related app ideas.
-3. **View ranked ideas**: The system displays the ideas ranked by priority score along with relevance, impact, and feasibility scores.
-4. **Select actions**:
-    - **Expand Ideas**: Select two ideas for a detailed expansion by typing their numbers separated by commas (e.g., `1,2`).
-    - **Priority Score Explanation**: Select an idea by typing its number to get a detailed explanation of its priority score.
+1. Input a query to generate app ideas.
+2. View the ranked list of ideas with their priority scores.
+3. Choose two ideas for detailed expansion or request an explanation of the priority score for an idea.
+4. Continue exploring or exit the application based on your preferences.
 
+## Prioritization Logic
+
+The prioritization of app ideas is based on a calculated **Priority Score**, which combines three key metrics:
+
+1. **Relevance**: Simulated using random values to represent how well an idea matches the user's query.
+2. **Impact**: Measured by the presence of keywords such as "innovative" or "disruptive," indicating the potential for significant market influence.
+3. **Feasibility**: Evaluated by identifying practical terms like "scalable" or "implementable" to ensure the idea can be realistically developed.
+
+Each metric is normalized to a 1-5 scale. The Priority Score is the average of the relevance, impact, and feasibility scores, providing a balanced view of an idea’s potential value.
 
 
 

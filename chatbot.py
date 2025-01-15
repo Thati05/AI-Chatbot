@@ -18,6 +18,8 @@ generation_config = {
     "response_mime_type": "text/plain",
 }
 
+#In the model set the systems instructuion tha will guide the AI's behavior
+
 model = genai.GenerativeModel(
     model_name="gemini-1.5-pro",
     generation_config=generation_config,
@@ -31,21 +33,24 @@ history = []
 impact_keywords = ["innovative", "disruptive", "growth"]
 feasibility_keywords = ["practical", "implementable", "scalable"]
 
+
+
 def generate_ideas(query):
     chat_session = model.start_chat(history=history)
     response = chat_session.send_message(query)
     model_response = response.text
     ideas = [idea.strip() for idea in model_response.split("\n") if idea.strip() and ":" in idea]
     return ideas
-
+  
+#Expanding on a specific idea usin the AI modela
 def expand_ideas(unique_idea):
     chat_session = model.start_chat(history=history)
     response = chat_session.send_message(f"Expand on the idea: {unique_idea}")
     return response.text.strip()
 
 def evaluate_relevance(idea, query):
-    """ Simulate AI evaluation for relevance using keyword matching for simplicity. """
-    return random.randint(1, 5)  # Replace with actual AI relevance evaluation
+    """ Simulate AI evaluation for relevance using keyword matching. """
+    return random.randint(1, 5)  
 
 def evaluate_idea(idea, query):
     relevance = evaluate_relevance(idea, query)
@@ -70,16 +75,18 @@ def rank_ideas(ideas):
 
 
 def main():
-    print("Hello :) How can I assist you?")
+    print("Welcome to the Creative App Idea Generator! 🎉\nHow can I assist you?")
     
     query = input("You: ")
 
     ideas = generate_ideas(query)
     ranked_ideas = rank_ideas(ideas)
     
-    print("\nRanked Ideas with Priority Scores:\n")
+    print("\n ✨ Here are ranked Ideas with Priority Scores:\n")
     for ranked_idea in ranked_ideas:
       print(f"{ranked_idea['idea']} - Priority Score: {ranked_idea['priority_score']} (Relevance: {ranked_idea['relevance']}, Impact: {ranked_idea['impact']}, Feasibility: {ranked_idea['feasibility']})\n")
+      
+      #User Interaction
 
     while True:
         action = input("\nWould you like to (1) Select an idea for expansion or (2) Request an explanation of the priority score? Type 1 or 2: ")
@@ -90,7 +97,7 @@ def main():
                 if 0 <= index < len(ranked_ideas):
                     idea = ranked_ideas[index]['idea']
                     suggestion = expand_ideas(idea)
-                    print(f"\nIdea: {idea}")
+                    print(f"\n🎨 Expanded Idea: {idea}")
                     print(f"Suggestion: {suggestion}")
                     break
                 else:
@@ -103,7 +110,7 @@ def main():
                 index = int(selection.strip()) - 1
                 if 0 <= index < len(ranked_ideas):
                     explanation = ranked_ideas[index]
-                    print(f"\nIdea: {explanation['idea']}")
+                    print(f"\n📊 Idea: {explanation['idea']}")
                     print(f"Priority Score: {explanation['priority_score']}")
                     print(f"Relevance: {explanation['relevance']}, Impact: {explanation['impact']}, Feasibility: {explanation['feasibility']}")
                     break

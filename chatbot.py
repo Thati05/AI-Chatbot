@@ -27,26 +27,35 @@ model = genai.GenerativeModel(
 # Initialize conversation history
 history = []
 
+# Example keyword lists
+impact_keywords = ["innovative", "disruptive", "growth"]
+feasibility_keywords = ["practical", "implementable", "scalable"]
+
 def generate_ideas(query):
     chat_session = model.start_chat(history=history)
     response = chat_session.send_message(query)
     model_response = response.text
-    ideas = [
-        idea.split(":", 1)[0].strip() + ":" + idea.split(":", 1)[1].strip().split("\n", 1)[0]
-        for idea in model_response.strip().split("\n") if ":" in idea
-    ]
-    return [idea for idea in ideas if idea.strip()]
+    ideas = [idea.strip() for idea in model_response.split("\n") if idea.strip() and ":" in idea]
+    return ideas
 
 def expand_ideas(unique_idea):
     chat_session = model.start_chat(history=history)
     response = chat_session.send_message(f"Expand on the idea: {unique_idea}")
     return response.text.strip()
 
-def mock_evaluate_idea(idea):
-    """ Mock AI evaluation returning random scores for demonstration purposes. """
-    relevance = random.randint(1, 5)
-    impact = random.randint(1, 5)
-    feasibility = random.randint(1, 5)
+def evaluate_relevance(idea, query):
+    """ Simulate AI evaluation for relevance using keyword matching for simplicity. """
+    return random.randint(1, 5)  # Replace with actual AI relevance evaluation
+
+def evaluate_idea(idea, query):
+    relevance = evaluate_relevance(idea, query)
+    impact = sum(1 for word in impact_keywords if word in idea.lower())
+    feasibility = sum(1 for word in feasibility_keywords if word in idea.lower())
+    
+    # Normalize scores to fit into a 1-5 scale
+    impact = min(max(impact, 1), 5)
+    feasibility = min(max(feasibility, 1), 5)
+    
     priority_score = (relevance + impact + feasibility) / 3
     return {
         "idea": idea,
@@ -57,23 +66,23 @@ def mock_evaluate_idea(idea):
     }
 
 def rank_ideas(ideas):
-    ranked_ideas = [mock_evaluate_idea(idea) for idea in ideas]
-    ranked_ideas.sort(key=lambda x: x["priority_score"])
-    return ranked_ideas
+    return [evaluate_idea(idea, "") for idea in ideas]
+
 
 def main():
-    query = "What new app should I build?"
-    print(f"Query: {query}")
+    print("Hello :) How can I assist you?")
+    
+    query = input("You: ")
 
     ideas = generate_ideas(query)
     ranked_ideas = rank_ideas(ideas)
 
     print("\nRanked Ideas with Priority Scores:")
-    for i, ranked_idea in enumerate(ranked_ideas, 1):
-        print(f"{i}. {ranked_idea['idea']} - Priority Score: {ranked_idea['priority_score']} (Relevance: {ranked_idea['relevance']}, Impact: {ranked_idea['impact']}, Feasibility: {ranked_idea['feasibility']})")
+    for ranked_idea in ranked_ideas:
+        print(f"{ranked_idea['idea']} - Priority Score: {ranked_idea['priority_score']} (Relevance: {ranked_idea['relevance']}, Impact: {ranked_idea['impact']}, Feasibility: {ranked_idea['feasibility']})\n")
 
     while True:
-        selection = input("\nSelect two ideas by typing their numbers (e.g., 1, 3): ")
+        selection = input("\nSelect two ideas by typing their numbers for further explanation (e.g., 1, 3): ")
         try:
             selected_indices = [int(x.strip()) for x in selection.split(',')]
             if len(selected_indices) == 2 and all(1 <= i <= len(ranked_ideas) for i in selected_indices):
